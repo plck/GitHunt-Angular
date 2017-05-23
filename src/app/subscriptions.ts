@@ -1,4 +1,4 @@
-import {print} from 'graphql-tag/printer';
+import {print} from 'graphql';
 import {Client} from 'subscriptions-transport-ws';
 
 // quick way to add the subscribe and unsubscribe functions to the network interface

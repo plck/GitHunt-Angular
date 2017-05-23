@@ -4,7 +4,7 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ApolloModule } from 'apollo-angular';
-import { EmojifyModule } from 'angular2-emojify';
+import { EmojifyModule } from 'angular-emojify';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
