@@ -15,7 +15,7 @@ import { COMMENTS_DECLARATIONS } from './comments';
 import { SHARED_DECLARATIONS } from './shared';
 import { routes } from './routes';
 import { provideClient } from './client';
-import { InfiniteScrollModule } from 'angular2-infinite-scroll';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
