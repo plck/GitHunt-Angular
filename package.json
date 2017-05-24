@@ -35,8 +35,8 @@
   "devDependencies": {
     "@angular/cli": "1.0.4",
     "@angular/compiler-cli": "^4.0.0",
-    "codelyzer": "~2.0.1",
-    "ts-node": "2.1.0",
+    "codelyzer": "~3.0.1",
+    "ts-node": "3.0.4",
     "tslint": "~4.5.1",
     "typescript": "~2.2.0"
   }
