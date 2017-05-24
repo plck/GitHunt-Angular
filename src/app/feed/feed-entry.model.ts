@@ -22,7 +22,7 @@ export const fragments: {
       ...VoteButtons
       ...RepoInfo
     }
-    
+
     ${VoteButtonsFragments['entry']}
     ${RepoInfoFragments['entry']}
   `,
