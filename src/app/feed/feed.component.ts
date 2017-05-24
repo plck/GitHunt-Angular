@@ -89,7 +89,6 @@ function pushEntries<T>(prev: any, data: any): T {
   if (!data) {
     return prev;
   }
-  console.log('push prv',prev,'data',data);
   return Object.assign({}, prev, {
     feed: [...prev.feed, ...data.feed],
   });
