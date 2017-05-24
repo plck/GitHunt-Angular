@@ -84,7 +84,6 @@ export class FeedComponent implements OnInit, OnDestroy {
 }
 
 // helper functions
-
 function pushEntries<T>(prev: any, data: any): T {
   if (!data) {
     return prev;
