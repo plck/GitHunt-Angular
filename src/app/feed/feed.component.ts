@@ -71,7 +71,7 @@ export class FeedComponent implements OnInit, OnDestroy {
       variables: {
         offset: this.offset + this.itemsPerPage
       },
-      updateQuery: (prev, {fetchMoreResult}) => pushEntries(prev, fetchMoreResult.data)
+      updateQuery: (prev, {fetchMoreResult}) => pushEntries(prev, fetchMoreResult)
     })
       .then(() => {
         this.offset += this.itemsPerPage;
@@ -84,12 +84,10 @@ export class FeedComponent implements OnInit, OnDestroy {
 }
 
 // helper functions
-
 function pushEntries<T>(prev: any, data: any): T {
   if (!data) {
     return prev;
   }
-
   return Object.assign({}, prev, {
     feed: [...prev.feed, ...data.feed],
   });
