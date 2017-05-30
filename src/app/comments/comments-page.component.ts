@@ -176,10 +176,10 @@ function optimisticComment(postedBy: any, content: Comment): Object {
 }
 
 function pushComments<T>(prev: any, {fetchMoreResult}: any): T {
-  const newComments: Comment[] = fetchMoreResult.data.entry.comments;
-  const commentCount: number = fetchMoreResult.data.entry.commentCount;
+  const newComments: Comment[] = fetchMoreResult.entry.comments;
+  const commentCount: number = fetchMoreResult.entry.commentCount;
 
-  if (!fetchMoreResult.data.entry.comments) {
+  if (!fetchMoreResult.entry.comments) {
     return prev;
   }
 
