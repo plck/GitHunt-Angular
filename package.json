@@ -26,14 +26,14 @@
     "apollo-angular": "^0.13.0",
     "apollo-client": "^1.2.2",
     "core-js": "^2.4.1",
-    "graphql": "^0.9.6",
-    "rxjs": "^5.1.0",
+    "graphql": "^0.10.0",
+    "rxjs": "^5.4.0",
     "subscriptions-transport-ws": "0.6.0",
     "ts-helpers": "^1.1.2",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "1.0.4",
+    "@angular/cli": "1.0.6",
     "@angular/compiler-cli": "^4.0.0",
     "codelyzer": "~3.0.1",
     "ts-node": "3.0.4",
