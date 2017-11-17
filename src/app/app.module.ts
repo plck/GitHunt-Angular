@@ -1,11 +1,12 @@
-
 import { NgModule } from '@angular/core';
 import { BrowserModule  } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { ApolloModule } from 'apollo-angular';
 import { EmojifyModule } from 'angular-emojify';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
+import { GraphQLModule } from './graphql.module';
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -14,8 +15,6 @@ import { FEED_DECLARATIONS } from './feed';
 import { COMMENTS_DECLARATIONS } from './comments';
 import { SHARED_DECLARATIONS } from './shared';
 import { routes } from './routes';
-import { provideClient } from './client';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -32,10 +31,11 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
-    ApolloModule.forRoot(provideClient),
+    GraphQLModule,
     EmojifyModule,
     InfiniteScrollModule
   ],

@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.currentUserSub = this.apollo.watchQuery({
       query: CurrentUserQuery,
-    }).subscribe(({data, loading}) => {
+    }).valueChanges.subscribe(({data, loading}) => {
       this.currentUser = data['currentUser'];
       this.loading = loading;
     });

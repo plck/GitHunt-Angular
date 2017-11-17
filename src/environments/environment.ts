@@ -4,5 +4,9 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  graphql: {
+    http: 'http://localhost:3000/graphql',
+    ws: 'ws://localhost:3010/subscriptions'
+  }
 };

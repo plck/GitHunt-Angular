@@ -1,10 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Apollo, ApolloQueryObservable} from 'apollo-angular';
+import {Apollo, QueryRef} from 'apollo-angular';
 import {Subscription} from 'rxjs/Subscription';
-import {Subject} from 'rxjs/Subject';
-
-import 'rxjs/add/operator/toPromise';
 
 import {commentQuery, submitCommentMutation, subscriptionQuery} from './comments-page.model';
 import {Comment} from '../../schema-types';
@@ -32,8 +29,7 @@ export class CommentsPageComponent implements OnInit, OnDestroy {
   public loadingMoreComments = false;
   public errors: any[];
 
-  private repoName: Subject<string> = new Subject<string>();
-  private entryObs: ApolloQueryObservable<any>;
+  private entryRef: QueryRef<any>;
   private entrySub: Subscription;
   private subscriptionRepoName: string;
   private subscriptionSub: Subscription;
@@ -45,29 +41,31 @@ export class CommentsPageComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    // Fetch
-    this.entryObs = this.apollo.watchQuery({
-      query: commentQuery,
-      variables: {
-        repoFullName: this.repoName,
-        limit: COMMENTS_PER_QUERY,
-        offset: this.offset
-      },
-    });
-
-    // Subscribe
-    this.entrySub = this.entryObs.subscribe(({data, loading}) => {
-      this.entry = data.entry;
-      this.currentUser = data.currentUser;
-      this.loading = loading;
-    });
-
     // Listen to the route
     this.route.params.subscribe(params => {
       const repoName = `${params['org']}/${params['repoName']}`;
 
       this.loading = true;
-      this.repoName.next(repoName);
+
+      // Fetch
+      this.entryRef = this.apollo.watchQuery({
+        query: commentQuery,
+        variables: {
+          repoFullName: repoName,
+          limit: COMMENTS_PER_QUERY,
+          offset: this.offset
+        },
+      });
+
+      // Subscribe
+      if (this.entrySub) {
+        this.entrySub.unsubscribe();
+      }
+      this.entrySub = this.entryRef.valueChanges.subscribe(({data, loading}) => {
+        this.entry = data.entry;
+        this.currentUser = data.currentUser;
+        this.loading = loading;
+      });
 
       // subscribe to comments
       if (this.subscriptionSub) {
@@ -84,7 +82,7 @@ export class CommentsPageComponent implements OnInit, OnDestroy {
       this.loadingMoreComments = true;
       this.offset += COMMENTS_PER_QUERY;
 
-      this.entryObs.fetchMore({
+      this.entryRef.fetchMore({
         variables: {
           limit: COMMENTS_PER_QUERY,
           offset: this.offset
@@ -128,9 +126,10 @@ export class CommentsPageComponent implements OnInit, OnDestroy {
           }
         }
       })
-        .toPromise()
-        .then(() => this.newComment = null)
-        .catch(errors => this.errors = errors);
+        .subscribe({
+          next: () => this.newComment = null,
+          error: (error) => this.errors = error,
+        });
     }
   }
 
@@ -149,7 +148,7 @@ export class CommentsPageComponent implements OnInit, OnDestroy {
       next: (data) => {
         const newComment: Comment = data.commentAdded;
 
-        this.entryObs.updateQuery((previousResult) => pushNewComment<Object>(previousResult, newComment));
+        this.entryRef.updateQuery((previousResult) => pushNewComment<Object>(previousResult, newComment));
       },
       error(err: any): void {
         console.error('err', err);

@@ -1,8 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 
-import 'rxjs/add/operator/toPromise';
-
 import {commentQuery} from '../comments/comments-page.model';
 import {COMMENTS_PER_QUERY} from '../comments/comments-page.component';
 
@@ -57,7 +55,7 @@ export class RepoInfoComponent implements OnInit {
           offset: 0,
           limit: COMMENTS_PER_QUERY,
         }
-      }).toPromise();
+      }).subscribe();
 
       this.prefetched = true;
     }
