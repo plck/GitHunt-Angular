@@ -7,6 +7,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { getMainDefinition } from 'apollo-utilities';
 import { RetryLink } from 'apollo-link-retry';
+import { persistCache } from 'apollo-cache-persist';
 
 import { environment } from '../environments/environment';
 
@@ -14,16 +15,6 @@ const subscriptionLink = new WebSocketLink({
   uri: environment.graphql.ws,
   options: { reconnect: true }
 });
-
-// TODO: batching
-const requestLink = (queryOrMutationLink: ApolloLink) => ApolloLink.split(
-  ({ query }) => {
-    const { kind, operation } = getMainDefinition(query);
-    return kind === 'OperationDefinition' && operation === 'subscription';
-  },
-  subscriptionLink,
-  queryOrMutationLink,
-);
 
 const retryLink = new RetryLink({
   delay: {
@@ -33,7 +24,7 @@ const retryLink = new RetryLink({
   },
   attempts: (count, operation, error) => {
     console.log(count);
-    const serverUnavailable = count <= 3;
+    const serverUnavailable = count >= 3;
     return serverUnavailable;
   }
 });
@@ -48,32 +39,22 @@ const graphQLErrorHandler = onError(({ operation, graphQLErrors, networkError })
   }
 });
 
-
 @NgModule({
   exports: [
-    ApolloModule,
-    HttpLinkModule
+    ApolloModule
   ]
 })
 export class GraphQLModule {
   constructor(
-    apollo: Apollo,
-    httpLink: HttpLink
+    apollo: Apollo
   ) {
-    const link = requestLink(
-      httpLink.create({
-        uri: environment.graphql.http,
-        withCredentials: true
-      })
-    );
-
     apollo.create({
       link: from([
         retryLink as any,
         graphQLErrorHandler as any,
-        link as any
+        subscriptionLink as any
       ]),
-      cache: new InMemoryCache
+      cache: new InMemoryCache()
     });
   }
 }
